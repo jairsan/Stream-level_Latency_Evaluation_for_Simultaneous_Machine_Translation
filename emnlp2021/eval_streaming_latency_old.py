@@ -1,6 +1,6 @@
 import sys
 
-def compute_measures(source_sentence_fp, target_sentence_fp, stream_RW_fp,penalty_scale_factor=1.0):
+def compute_measures_old(source_sentence_fp, target_sentence_fp, stream_RW_fp,penalty_scale_factor=1.0):
     with open(source_sentence_fp) as source_file, open(target_sentence_fp) as target_file, open(stream_RW_fp) as RW_file:
         src_lens = []
         tgt_lens = []
@@ -99,4 +99,4 @@ def compute_measures(source_sentence_fp, target_sentence_fp, stream_RW_fp,penalt
         DAL = DAL / len(tgt_sentences)
         print(AP,AL,DAL,sep=" ")
 if __name__ == "__main__":
-    compute_measures(sys.argv[1], sys.argv[2], sys.argv[3], float(sys.argv[4]))
+    compute_measures_old(sys.argv[1], sys.argv[2], sys.argv[3], float(sys.argv[4]))
