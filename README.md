@@ -1,9 +1,10 @@
 # Stream-level Latency Evaluation for Simultaneous Machine Translation
-This repository contains the code of the paper [Stream-level Latency Evaluation for Simultaneous Machine Translation](https://aclanthology.org/2021.findings-emnlp.58/).
+This repository contains the code of the paper [Stream-level Latency Evaluation for Simultaneous Machine Translation](https://aclanthology.org/2021.findings-emnlp.58/). 
 
 ## Installation
 ```shell
 git clone https://github.com/jairsan/Stream-level_Latency_Evaluation_for_Simultaneous_Machine_Translation.git
+cd Stream-level_Latency_Evaluation_for_Simultaneous_Machine_Translation/
 pip install .
 ```
 
@@ -46,24 +47,9 @@ File                                        AP    AP    AL
 iwslt17.dev2010.prepro.en                  0.8   4.4   5.8
 ```
 
-## Original implementation
-Originally, the experiments we conducted
-for the EMNLP 2021 Findings paper used [MWER](https://aclanthology.org/2005.iwslt-1.19/) for resegmenting the system hypothesis.
-In order to avoid the dependency on the MWER C binary (as well as some edge cases where the tool crashed), we
-have updated the code to use the Levenshtein distance realignment of the [SubER](https://github.com/apptek/SubER.git)
-package. The code has also been updated into a proper software package.
-
-
-Note that both versions of this software are "proper" implementations of the techniques described in the paper,
-as the only difference between them is some minor details on the Levensthen distance re-alignment. 
-This new implementation obtains the same results with very small differences (+- 0.1), but is much easier to use, and
-therefore I reccommend you use this updated version.
-
-Nevertheless, a snapshot of the original code at the time of publication is stored in the branch "emnlp2021", as well
-as in the "emnlp2021" folder.
-
 ## Standalone resegmentation
-Using the aforementioned SubER resegmentation, you can run just the resegmentation procedure by calling the wrapper ```stream_resegment``` command.
+Standalone resegmentation between the hypothesis and the reference text
+can be obtained by calling the wrapper ```stream_resegment``` command.
 
 ```
 stream_resegment [-h] --hypo_file HYPO_FILE --reference_file REFERENCE_FILE [--output_file OUTPUT_FILE]
@@ -80,7 +66,23 @@ optional arguments:
 
 The typical use case for this wrapper is to re-segment the system hypothesis for running quality evaluation. Thus, you would
 run resegmentation on the hypothesis before using you software of choice, such as sacrebleu, to compare against the reference. This way,
-both latency and quality evaluation are carried out on the same resegmentation.
+both latency and quality evaluation are carried out on the same resegmentation. Please note that [SubER](https://github.com/apptek/SubER.git), which is the source
+for the underlying resegmentation algorithm, also as a CLI tool for resegmentation, [align_hyp_to_ref.py](https://github.com/apptek/SubER/blob/main/suber/tools/align_hyp_to_ref.py) 
+
+## Original implementation
+Originally, the experiments we conducted
+for the EMNLP 2021 Findings paper used [MWER](https://aclanthology.org/2005.iwslt-1.19/) for resegmenting the system hypothesis.
+In order to avoid the dependency on the MWER C binary (as well as some edge cases where the tool crashed), we
+have updated the code to use the Levenshtein distance realignment of the [SubER](https://github.com/apptek/SubER.git)
+package. The code has also been updated into a proper software package.
+
+Note that both versions of this software are "proper" implementations of the techniques described in the paper,
+as the only difference between them is some minor details on the Levensthen distance realignment. 
+This new implementation obtains the same results with very small differences (+- 0.1), but is much easier to use, and
+therefore I recommend you use this updated version.
+
+Nevertheless, a snapshot of the original code at the time of publication is stored in the branch "emnlp2021", as well
+as in the "emnlp2021" folder.
 
 
 ## Citation
