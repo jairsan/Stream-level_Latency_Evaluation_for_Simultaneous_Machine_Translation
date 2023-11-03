@@ -13,7 +13,11 @@ def sentence_translation_lag(src_timestamps: List[float], target_lags: List[floa
     for i in range(len(target_lags)):
         j = math.ceil(i * len(src_timestamps)/len(target_lags))
         lags.append(target_lags[i] - src_timestamps[j])
-    return sum(lags)/len(lags)
+
+    if len(lags) > 0:
+        return sum(lags)/len(lags)
+    else:
+        return 0
 
 def main_cli():
     parser = argparse.ArgumentParser(prog="stream_latency")
