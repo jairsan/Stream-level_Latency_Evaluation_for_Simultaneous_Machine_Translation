@@ -8,10 +8,9 @@ from streaming_latency_tk.resegment import resegment
 from streaming_latency_tk.utils import load_file_to_list, transfer_segmentation_to_list
 
 def sentence_translation_lag(src_timestamps: List[float], target_lags: List[float]) -> float:
-    assert len(src_timestamps) == len(target_lags)
     lags: List[float] = []
     for i in range(len(target_lags)):
-        j = math.ceil(i * len(src_timestamps)/len(target_lags))
+        j = math.floor(i * len(src_timestamps)/len(target_lags))
         lags.append(target_lags[i] - src_timestamps[j])
 
     if len(lags) > 0:
@@ -75,9 +74,9 @@ def main_cli():
         lag_stream = load_file_to_list(lag_file_fp)
         assert len(lag_stream) == 1
         lag_stream = lag_stream[0]
-
+        
         aligned_lag_stream = transfer_segmentation_to_list(reference_segmentation=aligned_hypothesis, list_to_transform=lag_stream)
-
+        aligned_lag_stream = [[ float(x) for x in sent] for sent in aligned_lag_stream]
         src_reference = load_file_to_list(reference_src_fp)
         assert os.path.splitext(reference_json_file_fp)[1] == ".json"
 
@@ -87,9 +86,9 @@ def main_cli():
         with open(reference_json_file_fp) as jsonf:
             words_and_timestamps = json.load(jsonf)
             for segment in words_and_timestamps:
-                segment_words = [word_dict["w"].strip() for word_dict in segment]
+                segment_words = [word_dict["w"].strip() for word_dict in segment["wl"]]
                 actual_words.append(segment_words)
-                src_timestamps.extend([word_dict["e"] for word_dict in segment])
+                src_timestamps.extend([word_dict["e"] for word_dict in segment["wl"]])
 
         resegmented_actual_words = resegment(hypothesis=actual_words, reference=src_reference)
 
